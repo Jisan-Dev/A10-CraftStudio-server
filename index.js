@@ -22,6 +22,27 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const productCollection = client.db('craftDB').collection('products');
+
+    app.get('/allProducts', async (req, res) => {
+      const cursor = productCollection.find();
+      const products = await cursor.toArray();
+      res.send(products);
+    });
+
+    app.get('/allProducts/:email', async (req, res) => {
+      const cursor = productCollection.find({ email: req.params.email });
+      const products = await cursor.toArray();
+      console.log(products);
+      res.send(products);
+    });
+
+    app.post('/addProduct', async (req, res) => {
+      console.log(req.body);
+      const result = await productCollection.insertOne(req.body);
+      res.send(result);
+    });
+
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection
