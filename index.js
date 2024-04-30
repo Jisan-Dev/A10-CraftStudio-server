@@ -36,6 +36,13 @@ async function run() {
       const categories = await cursor.toArray();
       res.send(categories);
     });
+    app.get('/category/:name', async (req, res) => {
+      console.log(req.params.name);
+      const cursor = productCollection.find({ subcategory_name: req.params.name });
+      const categories = await cursor.toArray();
+      console.log(categories);
+      res.send(categories);
+    });
 
     app.get('/allProducts/:email', async (req, res) => {
       const cursor = productCollection.find({ email: req.params.email });
