@@ -23,11 +23,18 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const productCollection = client.db('craftDB').collection('products');
+    const categoryCollection = client.db('craftDB').collection('categories');
 
     app.get('/allProducts', async (req, res) => {
       const cursor = productCollection.find();
       const products = await cursor.toArray();
       res.send(products);
+    });
+
+    app.get('/categories', async (req, res) => {
+      const cursor = categoryCollection.find();
+      const categories = await cursor.toArray();
+      res.send(categories);
     });
 
     app.get('/allProducts/:email', async (req, res) => {
@@ -37,7 +44,6 @@ async function run() {
     });
 
     app.get('/productDetails/:id', async (req, res) => {
-      console.log(req.params.id);
       const product = await productCollection.findOne({ _id: new ObjectId(req.params.id) });
       res.send(product);
     });
