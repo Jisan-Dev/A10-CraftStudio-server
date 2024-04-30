@@ -54,8 +54,6 @@ async function run() {
         $set: req.body,
       };
       const result = await productCollection.updateOne(query, doc);
-      console.log(req.params.id);
-      console.log(result);
       res.send(result);
     });
 
