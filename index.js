@@ -39,12 +39,23 @@ async function run() {
     app.get('/productDetails/:id', async (req, res) => {
       console.log(req.params.id);
       const product = await productCollection.findOne({ _id: new ObjectId(req.params.id) });
-      console.log('h', product);
       res.send(product);
     });
 
     app.post('/addProduct', async (req, res) => {
       const result = await productCollection.insertOne(req.body);
+      res.send(result);
+    });
+
+    app.put('/updateProduct/:id', async (req, res) => {
+      const query = { _id: new ObjectId(req.params.id) };
+      // const result = await productCollection.updateOne(query, { $set: req.body });
+      const doc = {
+        $set: req.body,
+      };
+      const result = await productCollection.updateOne(query, doc);
+      console.log(req.params.id);
+      console.log(result);
       res.send(result);
     });
 
