@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.chn7ebi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -33,12 +33,17 @@ async function run() {
     app.get('/allProducts/:email', async (req, res) => {
       const cursor = productCollection.find({ email: req.params.email });
       const products = await cursor.toArray();
-      console.log(products);
       res.send(products);
     });
 
+    app.get('/productDetails/:id', async (req, res) => {
+      console.log(req.params.id);
+      const product = await productCollection.findOne({ _id: new ObjectId(req.params.id) });
+      console.log('h', product);
+      res.send(product);
+    });
+
     app.post('/addProduct', async (req, res) => {
-      console.log(req.body);
       const result = await productCollection.insertOne(req.body);
       res.send(result);
     });
